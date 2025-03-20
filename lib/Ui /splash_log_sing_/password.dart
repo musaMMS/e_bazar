@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'Password_recovery.dart';
+
 
 class PasswordScreen extends StatelessWidget {
   const PasswordScreen({super.key});
@@ -70,7 +72,9 @@ class PasswordScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>PasswordRecoveryScreen()));
+                    },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
