@@ -1,3 +1,4 @@
+import 'package:e_bazar/Ui%20/Home/Home_screen.dart';
 import 'package:e_bazar/widget/app_image.dart';
 import 'package:flutter/material.dart';
 
@@ -76,7 +77,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   children: List.generate(
                     onboardingData.length,
                         (index) => AnimatedContainer(
-                      duration: Duration(milliseconds: 300),
+                      duration: Duration(seconds: 3),
                       margin: EdgeInsets.symmetric(horizontal: 4),
                       height: 8,
                       width: currentIndex == index ? 10 : 8,
@@ -140,7 +141,7 @@ class OnboardingCard extends StatelessWidget {
               if (showButton)
               GestureDetector(
                 onTap: (){
-                  print("$buttonText Clicked!");
+                 Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 12,horizontal: 24),
