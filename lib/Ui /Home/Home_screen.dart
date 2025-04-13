@@ -146,7 +146,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                sectionHeader('Categories'),
+                sectionHeader('New Item'),
                 GridView.count(
                   crossAxisCount: 4,
                   shrinkWrap: true,
@@ -155,10 +155,10 @@ class ProfileScreen extends StatelessWidget {
                   mainAxisSpacing: 8,
                   childAspectRatio: 0.7,
                   children: [
-                    categoryItem('Clothing', 'assets/cat1.jpg', 109),
-                    categoryItem('Shoes', 'assets/cat2.jpg', 530),
-                    categoryItem('Bags', 'assets/cat3.jpg', 87),
-                    categoryItem('Lingerie', 'assets/cat4.jpg', 218),
+                    categoryItem('Clothing', 'assets/person/musa512.png', 109),
+                    categoryItem('Shoes', 'assets/person/m1.png', 530),
+                    categoryItem('Bags', 'assets/person/m2.png', 87),
+                    categoryItem('Lingerie', 'assets/person/m3.png', 218),
                   ],
                 ),
                 const SizedBox(height: 20),
