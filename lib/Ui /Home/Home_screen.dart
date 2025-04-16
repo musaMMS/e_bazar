@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-class ProfileScreen extends StatelessWidget {
-  ProfileScreen({super.key});
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   final List<String> youtubeVideoIds = [
     'dQw4w9WgXcQ',
     'K18cpp_-gP8',
@@ -27,7 +32,7 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     const CircleAvatar(
                       radius: 24,
-                      backgroundImage: AssetImage('assets/user.jpg'),
+                      backgroundImage: AssetImage('assets/musa.jpeg'),
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -88,7 +93,7 @@ class ProfileScreen extends StatelessWidget {
                       padding: const EdgeInsets.only(right: 8.0),
                       child: CircleAvatar(
                         radius: 30,
-                        backgroundImage: AssetImage('assets/user${index + 1}.jpg'),
+                        backgroundImage: AssetImage('assets/musa.jpeg'),
                       ),
                     ),
                   ),
@@ -177,17 +182,6 @@ class ProfileScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_bag_outlined), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.mail_outline), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: ''),
-        ],
-      ),
     );
   }
 
@@ -236,6 +230,9 @@ class ProfileScreen extends StatelessWidget {
       ],
     );
   }
+
+
+
 
   Widget categoryItem(String title, String imagePath, int count) {
     return Column(
