@@ -1,5 +1,6 @@
 import 'package:e_bazar/Ui%20/Home/Home_screen.dart';
 import 'package:e_bazar/Ui%20/splash_log_sing_/CreateAn_account.dart';
+import 'package:e_bazar/widget/bottomNavigationbar.dart';
 import 'package:flutter/material.dart';
 
 import '../Home/Card_screen.dart';
@@ -65,7 +66,7 @@ class SplashScreen extends StatelessWidget {
           SizedBox(height: 15),
           TextButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen())); //OnboardingScreen
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>NavigationScreen())); //OnboardingScreen
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,

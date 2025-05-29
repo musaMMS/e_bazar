@@ -141,7 +141,7 @@ class OnboardingCard extends StatelessWidget {
               if (showButton)
               GestureDetector(
                 onTap: (){
-                 Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen()));
+                 Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 12,horizontal: 24),

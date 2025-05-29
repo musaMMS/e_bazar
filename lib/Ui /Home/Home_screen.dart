@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import '../../widget/imagepath.dart';
+import '../selectedproduct/Product_details.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   final List<String> youtubeVideoIds = [
     'dQw4w9WgXcQ',
     'K18cpp_-gP8',
@@ -22,163 +25,225 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Top Bar
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const CircleAvatar(
+                    radius: 24,
+                    backgroundImage: AssetImage('assets/musa.jpeg'),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      shape: const StadiumBorder(),
+                    ),
+                    onPressed: () {},
+                    child: const Text('My Activity'),
+                  ),
+                  Row(
+                    children: const [
+                      Icon(Icons.notifications_none),
+                      SizedBox(width: 12),
+                      Icon(Icons.settings),
+                    ],
+                  )
+                ],
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Hello, MusaDev!',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 12),
+
+              // Announcement
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const CircleAvatar(
-                      radius: 24,
-                      backgroundImage: AssetImage('assets/musa.jpeg'),
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        shape: const StadiumBorder(),
-                      ),
-                      onPressed: () {},
-                      child: const Text('My Activity'),
-                    ),
-                    Row(
-                      children: const [
-                        Icon(Icons.notifications_none),
-                        SizedBox(width: 12),
-                        Icon(Icons.settings),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Announcement', style: TextStyle(fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Lorem ipsum dolor sit amet, consectetur...',
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
                       ],
-                    )
+                    ),
+                    const Icon(Icons.arrow_forward_ios, color: Colors.blue),
                   ],
                 ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Hello, Romina!',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 12),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Announcement', style: TextStyle(fontWeight: FontWeight.bold)),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Lorem ipsum dolor sit amet, consectetur...',
-                            style: TextStyle(color: Colors.grey[600]),
-                          ),
-                        ],
-                      ),
-                      const Icon(Icons.arrow_forward_ios, color: Colors.blue),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
-                const Text('Recently viewed', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 10),
-                SizedBox(
-                  height: 60,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 5,
-                    itemBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: CircleAvatar(
-                        radius: 30,
-                        backgroundImage: AssetImage('assets/musa.jpeg'),
-                      ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // Recently Viewed
+              const Text('Recently viewed', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 10),
+              SizedBox(
+                height: 60,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: AppImages.recentlyViewedImages.length,
+                  itemBuilder: (context, index) => Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: CircleAvatar(
+                      radius: 30,
+                      backgroundImage: AssetImage(AppImages.recentlyViewedImages[index]),
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
-                const Text('My Orders', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    orderButton('To Pay'),
-                    orderButton('To Receive', isActive: true),
-                    orderButton('To Review'),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                const Text('Stories', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 10),
-                SizedBox(
-                  height: 180,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: youtubeVideoIds.length,
-                    itemBuilder: (context, index) {
-                      String videoId = youtubeVideoIds[index];
-                      return GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (_) => AlertDialog(
-                              content: AspectRatio(
-                                aspectRatio: 16 / 9,
-                                child: StoryPlayer(videoId: videoId),
-                              ),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(right: 12),
-                          width: 120,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            image: DecorationImage(
-                              image: NetworkImage('https://img.youtube.com/vi/$videoId/0.jpg'),
-                              fit: BoxFit.cover,
+              ),
+
+              const SizedBox(height: 20),
+
+              // My Orders
+              const Text('My Orders', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  orderButton('To Pay'),
+                  orderButton('To Receive', isActive: true),
+                  orderButton('To Review'),
+                ],
+              ),
+
+              const SizedBox(height: 20),
+
+              // Stories (YouTube)
+              const Text('Stories', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 10),
+              SizedBox(
+                height: 180,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: youtubeVideoIds.length,
+                  itemBuilder: (context, index) {
+                    String videoId = youtubeVideoIds[index];
+                    return GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                            content: AspectRatio(
+                              aspectRatio: 16 / 9,
+                              child: StoryPlayer(videoId: videoId),
                             ),
                           ),
-                          child: const Align(
-                            alignment: Alignment.center,
-                            child: Icon(Icons.play_circle_fill, size: 48, color: Colors.white),
+                        );
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(right: 12),
+                        width: 120,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          image: DecorationImage(
+                            image: NetworkImage('https://img.youtube.com/vi/$videoId/0.jpg'),
+                            fit: BoxFit.cover,
                           ),
                         ),
-                      );
-                    },
-                  ),
+                        child: const Align(
+                          alignment: Alignment.center,
+                          child: Icon(Icons.play_circle_fill, size: 48, color: Colors.white),
+                        ),
+                      ),
+                    );
+                  },
                 ),
-                const SizedBox(height: 20),
-                sectionHeader('New Item'),
-                GridView.count(
-                  crossAxisCount: 4,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 8,
-                  childAspectRatio: 0.7,
-                  children: [
-                    categoryItem('Clothing', 'assets/person/musa512.png', 109),
-                    categoryItem('Shoes', 'assets/person/m1.png', 530),
-                    categoryItem('Bags', 'assets/person/m2.png', 87),
-                    categoryItem('Lingerie', 'assets/person/m3.png', 218),
-                  ],
+              ),
+
+              const SizedBox(height: 20),
+
+              // New Item Section
+              sectionHeader('New Item'),
+              GridView.count(
+                crossAxisCount: 4,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 8,
+                childAspectRatio: 0.7,
+                children: [
+                  categoryItem('Clothing', 'assets/person/musa512.png', 109),
+                  categoryItem('Shoes', 'assets/person/m1.png', 530),
+                  categoryItem('Bags', 'assets/person/m2.png', 87),
+                  categoryItem('Lingerie', 'assets/person/m3.png', 218),
+                ],
+              ),
+
+              const SizedBox(height: 20),
+
+              // Flash Sale Section
+              sectionHeader('Flash Sale', showTimer: true),
+              GridView.count(
+                crossAxisCount: 3,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
+                childAspectRatio: 0.65,
+                children: List.generate(AppImages.flashSaleList.length, (index)=> flashSaleItem(AppImages.flashSaleList[index])),
+              ),
+
+              const SizedBox(height: 20),
+
+              // Categories from AppImages
+              sectionHeader('Categories'),
+              SizedBox(
+                height: 130,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: AppImages.categoryList.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        width: 100,
+                        child: categoryItem(
+                          'Category $index',
+                          AppImages.categoryList[index],
+                          20 + index,
+                        ),
+                      ),
+                    );
+                  },
                 ),
-                const SizedBox(height: 20),
-                sectionHeader('Flash Sale', showTimer: true),
-                GridView.count(
-                  crossAxisCount: 3,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  mainAxisSpacing: 8,
-                  crossAxisSpacing: 8,
-                  childAspectRatio: 0.65,
-                  children: List.generate(6, (index) => flashSaleItem('assets/sale${index + 1}.jpg')),
+              ),
+
+              const SizedBox(height: 20),
+
+              // Horizontal Flash Sale Items
+              sectionHeader('Horizontal Sale'),
+              SizedBox(
+                height: 200,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: AppImages.flashSaleList.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: const EdgeInsets.all(8),
+                      width: 150,
+                      child: flashSaleItem(AppImages.flashSaleList[index]),
+                    );
+                  },
                 ),
-              ],
-            ),
+              ),
+              SizedBox(height: 5,),
+              JustForYouSection(),
+            ],
           ),
         ),
       ),
@@ -231,9 +296,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-
-
-
   Widget categoryItem(String title, String imagePath, int count) {
     return Column(
       children: [
@@ -274,10 +336,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
+// YouTube Story Player
 class StoryPlayer extends StatefulWidget {
   final String videoId;
-
-  const StoryPlayer({Key? key, required this.videoId}) : super(key: key);
+  const StoryPlayer({super.key, required this.videoId});
 
   @override
   State<StoryPlayer> createState() => _StoryPlayerState();
@@ -294,7 +356,6 @@ class _StoryPlayerState extends State<StoryPlayer> {
       flags: const YoutubePlayerFlags(
         autoPlay: true,
         mute: false,
-        loop: false,
       ),
     );
   }
@@ -313,3 +374,119 @@ class _StoryPlayerState extends State<StoryPlayer> {
     );
   }
 }
+
+class JustForYouSection extends StatelessWidget {
+  const JustForYouSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final products = AppImages.products;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Section title
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+          child: Row(
+            children: const [
+              Text(
+                'Just For You ',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Icon(Icons.star, color: Colors.blue, size: 20),
+            ],
+          ),
+        ),
+
+        // Product Grid
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: products.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 0.75,
+            ),
+            itemBuilder: (context, index) {
+              final product = products[index];
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProductDetailsPage(product: product),
+                    ),
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 6,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Image section
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                          child: Image.asset(
+                            product['image']!,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                          ),
+                        ),
+                      ),
+
+                      // New label above price
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+                        child: Text(
+                          'Special Offer\ Baicha Lon',
+                          style: const TextStyle(
+                            color: Colors.deepOrange,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+
+                      // Price text
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+                        child: Text(
+                          product['price']!,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
