@@ -1,12 +1,22 @@
-import 'package:e_bazar/Ui%20/Home/Home_screen.dart';
-import 'package:e_bazar/Ui%20/splash_log_sing_/CreateAn_account.dart';
+import 'package:e_bazar/AdMob/Interstital_ad.dart';
+import 'package:e_bazar/Ui%20/splash_log_sing_/LoginScreen.dart';
 import 'package:e_bazar/widget/bottomNavigationbar.dart';
 import 'package:flutter/material.dart';
 
-import '../Home/Card_screen.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    AdHelper.loadInterstitialAd();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +65,8 @@ class SplashScreen extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>CreateAccountScreen()));
+                AdHelper.showInterstitialAd();
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
               },
               child: Text(
                 "Let's get started",
@@ -66,6 +77,7 @@ class SplashScreen extends StatelessWidget {
           SizedBox(height: 15),
           TextButton(
             onPressed: () {
+              AdHelper.showInterstitialAd();
               Navigator.push(context, MaterialPageRoute(builder: (context)=>NavigationScreen())); //OnboardingScreen
             },
             child: Row(

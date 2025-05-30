@@ -1,101 +1,203 @@
-import 'package:e_bazar/Ui%20/splash_log_sing_/password.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../Home/Home_screen.dart';
+import 'CreateAn_account.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool _isPasswordVisible = false;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  Future<void> _login() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("ইমেইল ও পাসওয়ার্ড দিন")),
+      );
+      return;
+    }
+
+    try {
+      final response = await Supabase.instance.client.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+
+      if (response.user != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => HomeScreen()),
+        );
+      }
+    } on AuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: ${e.message}")),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("কিছু সমস্যা হয়েছে")),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    double titleFontSize = screenWidth * 0.08;
+    double fieldVerticalPadding = screenWidth * 0.03;
+    double buttonFontSize = screenWidth * 0.045;
+    double buttonHeight = screenHeight * 0.065;
+    double horizontalPadding = screenWidth * 0.05;
+
     return Scaffold(
       body: Stack(
         children: [
-          // Background Design
           Positioned.fill(
             child: Image.asset(
-              'assets/Bubbles (1).png', // Make sure to add an image in assets
+              'assets/Bubbles.png',
               fit: BoxFit.cover,
             ),
           ),
-          // Login Content
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Login",
-                    style: GoogleFonts.poppins(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+          SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: screenHeight * 0.1),
+                Text(
+                  "Welcome\nBack!",
+                  style: TextStyle(
+                    fontSize: titleFontSize.clamp(24, 36),
+                    fontWeight: FontWeight.bold,
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "Good to see you back! ❤️",
-                    style: GoogleFonts.poppins(
-                      fontSize: 16,
-                      color: Colors.black54,
+                ),
+                const SizedBox(height: 30),
+                _buildTextField("Email", _emailController, screenWidth, fieldVerticalPadding),
+                _buildTextField("Password", _passwordController, screenWidth, fieldVerticalPadding,
+                    isPassword: true),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  height: buttonHeight.clamp(45, 60),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  TextField(
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: "Email",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
+                    onPressed: _login,
+                    child: Text(
+                      "Login",
+                      style: TextStyle(
+                        fontSize: buttonFontSize.clamp(14, 18),
+                        color: Colors.white,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                      ),
+                ),
+                const SizedBox(height: 15),
+
+                /// Forgot password and Create Account Row
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>PasswordScreen()));
+                        // TODO: Forgot password
                       },
                       child: Text(
-                        "Next",
-                        style: GoogleFonts.poppins(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Center(
-                    child: TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        "Cancel",
-                        style: GoogleFonts.poppins(
-                          fontSize: 16,
+                        "Forgot Password?",
+                        style: TextStyle(
                           color: Colors.black54,
+                          fontSize: buttonFontSize.clamp(14, 18),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
+                    const SizedBox(width: 10),
+                    Text("|", style: TextStyle(color: Colors.grey)),
+                    const SizedBox(width: 10),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const CreateAccountScreen()),
+                        );
+                      },
+                      child: Text(
+                        "Create Account",
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: buttonFontSize.clamp(14, 18),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: screenHeight * 0.02),
+              ],
             ),
           ),
         ],
       ),
     );
   }
+
+  Widget _buildTextField(String hint, TextEditingController controller,
+      double screenWidth, double fieldVerticalPadding,
+      {bool isPassword = false}) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15.0),
+      child: TextField(
+        controller: controller,
+        obscureText: isPassword && !_isPasswordVisible,
+        decoration: InputDecoration(
+          hintText: hint,
+          hintStyle: TextStyle(
+            fontSize: (screenWidth * 0.04).clamp(14, 18),
+          ),
+          filled: true,
+          fillColor: Colors.grey[200],
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide.none,
+          ),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: fieldVerticalPadding,
+          ),
+          suffixIcon: isPassword
+              ? IconButton(
+            icon: Icon(
+              _isPasswordVisible
+                  ? Icons.visibility
+                  : Icons.visibility_off,
+              color: Colors.grey,
+            ),
+            onPressed: () {
+              setState(() {
+                _isPasswordVisible = !_isPasswordVisible;
+              });
+            },
+          )
+              : null,
+        ),
+      ),
+    );
+  }
 }
+

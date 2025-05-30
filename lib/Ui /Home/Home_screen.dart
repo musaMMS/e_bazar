@@ -1,8 +1,9 @@
+import 'package:e_bazar/AdMob/Add_show.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../widget/imagepath.dart';
 import '../selectedproduct/Product_details.dart';
-
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,28 +20,40 @@ class _HomeScreenState extends State<HomeScreen> {
     'hY7m5jjJ9mM',
   ];
 
+  double getResponsiveSize(BuildContext context, double size) {
+    double width = MediaQuery.of(context).size.width;
+    return size * (width / 375); // 375 is a common design width
+  }
+
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(getResponsiveSize(context, 16)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              BannerAdWidget(),
+
               // Top Bar
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const CircleAvatar(
-                    radius: 24,
-                    backgroundImage: AssetImage('assets/musa.jpeg'),
+                  CircleAvatar(
+                    radius: getResponsiveSize(context, 24),
+                    backgroundImage: const AssetImage('assets/musa.jpeg'),
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
                       shape: const StadiumBorder(),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: getResponsiveSize(context, 16),
+                        vertical: getResponsiveSize(context, 8),
+                      ),
                     ),
                     onPressed: () {},
                     child: const Text('My Activity'),
@@ -54,64 +67,70 @@ class _HomeScreenState extends State<HomeScreen> {
                   )
                 ],
               ),
-              const SizedBox(height: 20),
-              const Text(
+              SizedBox(height: getResponsiveSize(context, 20)),
+
+              Text(
                 'Hello, MusaDev!',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: getResponsiveSize(context, 24),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: getResponsiveSize(context, 12)),
 
               // Announcement
               Container(
-                padding: const EdgeInsets.all(12),
+                padding: EdgeInsets.all(getResponsiveSize(context, 12)),
                 decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(getResponsiveSize(context, 12)),
                   color: Colors.grey.shade100,
-                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('Announcement', style: TextStyle(fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Lorem ipsum dolor sit amet, consectetur...',
-                          style: TextStyle(color: Colors.grey[600]),
-                        ),
-                      ],
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('Announcement', style: TextStyle(fontWeight: FontWeight.bold)),
+                          SizedBox(height: getResponsiveSize(context, 4)),
+                          Text(
+                            'Lorem ipsum dolor sit amet, consectetur...',
+                            style: TextStyle(color: Colors.grey[600]),
+                          ),
+                        ],
+                      ),
                     ),
                     const Icon(Icons.arrow_forward_ios, color: Colors.blue),
                   ],
                 ),
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: getResponsiveSize(context, 20)),
 
               // Recently Viewed
-              const Text('Recently viewed', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 10),
+              Text('Recently viewed', style: TextStyle(fontSize: getResponsiveSize(context, 18), fontWeight: FontWeight.bold)),
+              SizedBox(height: getResponsiveSize(context, 10)),
               SizedBox(
-                height: 60,
+                height: getResponsiveSize(context, 60),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: AppImages.recentlyViewedImages.length,
                   itemBuilder: (context, index) => Padding(
                     padding: const EdgeInsets.only(right: 8.0),
                     child: CircleAvatar(
-                      radius: 30,
+                      radius: getResponsiveSize(context, 30),
                       backgroundImage: AssetImage(AppImages.recentlyViewedImages[index]),
                     ),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: getResponsiveSize(context, 20)),
 
               // My Orders
-              const Text('My Orders', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 10),
+              Text('My Orders', style: TextStyle(fontSize: getResponsiveSize(context, 18), fontWeight: FontWeight.bold)),
+              SizedBox(height: getResponsiveSize(context, 10)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -121,13 +140,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: getResponsiveSize(context, 20)),
 
               // Stories (YouTube)
-              const Text('Stories', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 10),
+              Text('Stories', style: TextStyle(fontSize: getResponsiveSize(context, 18), fontWeight: FontWeight.bold)),
+              SizedBox(height: getResponsiveSize(context, 10)),
               SizedBox(
-                height: 180,
+                height: getResponsiveSize(context, 180),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: youtubeVideoIds.length,
@@ -147,9 +166,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       child: Container(
                         margin: const EdgeInsets.only(right: 12),
-                        width: 120,
+                        width: getResponsiveSize(context, 120),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(getResponsiveSize(context, 12)),
                           image: DecorationImage(
                             image: NetworkImage('https://img.youtube.com/vi/$videoId/0.jpg'),
                             fit: BoxFit.cover,
@@ -165,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: getResponsiveSize(context, 20)),
 
               // New Item Section
               sectionHeader('New Item'),
@@ -173,8 +192,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisCount: 4,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 8,
+                crossAxisSpacing: getResponsiveSize(context, 8),
+                mainAxisSpacing: getResponsiveSize(context, 8),
                 childAspectRatio: 0.7,
                 children: [
                   categoryItem('Clothing', 'assets/person/musa512.png', 109),
@@ -184,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: getResponsiveSize(context, 20)),
 
               // Flash Sale Section
               sectionHeader('Flash Sale', showTimer: true),
@@ -192,18 +211,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisCount: 3,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
+                mainAxisSpacing: getResponsiveSize(context, 8),
+                crossAxisSpacing: getResponsiveSize(context, 8),
                 childAspectRatio: 0.65,
                 children: List.generate(AppImages.flashSaleList.length, (index)=> flashSaleItem(AppImages.flashSaleList[index])),
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: getResponsiveSize(context, 20)),
 
               // Categories from AppImages
               sectionHeader('Categories'),
               SizedBox(
-                height: 130,
+                height: getResponsiveSize(context, 130),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: AppImages.categoryList.length,
@@ -211,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SizedBox(
-                        width: 100,
+                        width: getResponsiveSize(context, 100),
                         child: categoryItem(
                           'Category $index',
                           AppImages.categoryList[index],
@@ -223,26 +242,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: getResponsiveSize(context, 20)),
 
               // Horizontal Flash Sale Items
               sectionHeader('Horizontal Sale'),
               SizedBox(
-                height: 200,
+                height: getResponsiveSize(context, 200),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: AppImages.flashSaleList.length,
                   itemBuilder: (context, index) {
                     return Container(
                       margin: const EdgeInsets.all(8),
-                      width: 150,
+                      width: getResponsiveSize(context, 150),
                       child: flashSaleItem(AppImages.flashSaleList[index]),
                     );
                   },
                 ),
               ),
-              SizedBox(height: 5,),
-              JustForYouSection(),
+              SizedBox(height: getResponsiveSize(context, 5)),
+
+               JustForYouSection(),
             ],
           ),
         ),
@@ -252,10 +272,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget orderButton(String label, {bool isActive = false}) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+      padding: EdgeInsets.symmetric(
+        horizontal: getResponsiveSize(context, 18),
+        vertical: getResponsiveSize(context, 8),
+      ),
       decoration: BoxDecoration(
         color: Colors.blue.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(getResponsiveSize(context, 24)),
       ),
       child: Row(
         children: [
@@ -267,7 +290,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           if (isActive) ...[
-            const SizedBox(width: 6),
+            SizedBox(width: getResponsiveSize(context, 6)),
             const CircleAvatar(radius: 4, backgroundColor: Colors.green),
           ]
         ],
@@ -279,7 +302,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        Text(title, style: TextStyle(fontSize: getResponsiveSize(context, 18), fontWeight: FontWeight.bold)),
         if (showTimer)
           Row(
             children: const [
@@ -301,7 +324,7 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         Expanded(
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(getResponsiveSize(context, 12)),
             child: Image.asset(imagePath, fit: BoxFit.cover),
           ),
         ),
@@ -316,17 +339,20 @@ class _HomeScreenState extends State<HomeScreen> {
     return Stack(
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(getResponsiveSize(context, 12)),
           child: Image.asset(imagePath, fit: BoxFit.cover),
         ),
         Positioned(
-          top: 8,
-          left: 8,
+          top: getResponsiveSize(context, 8),
+          left: getResponsiveSize(context, 8),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+            padding: EdgeInsets.symmetric(
+              horizontal: getResponsiveSize(context, 6),
+              vertical: getResponsiveSize(context, 2),
+            ),
             decoration: BoxDecoration(
               color: Colors.red,
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: BorderRadius.circular(getResponsiveSize(context, 6)),
             ),
             child: const Text('-20%', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
           ),
@@ -336,7 +362,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-// YouTube Story Player
 class StoryPlayer extends StatefulWidget {
   final String videoId;
   const StoryPlayer({super.key, required this.videoId});
@@ -375,117 +400,59 @@ class _StoryPlayerState extends State<StoryPlayer> {
   }
 }
 
-class JustForYouSection extends StatelessWidget {
+
+class JustForYouSection extends StatefulWidget {
   const JustForYouSection({super.key});
 
   @override
+  State<JustForYouSection> createState() => _JustForYouSectionState();
+}
+
+class _JustForYouSectionState extends State<JustForYouSection> {
+  List<dynamic> products = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchProducts();
+  }
+
+  Future<void> fetchProducts() async {
+    final response = await Supabase.instance.client
+        .from('products')
+        .select()
+        .order('id', ascending: false);
+    setState(() {
+      products = response;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final products = AppImages.products;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Section title
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-          child: Row(
-            children: const [
-              Text(
-                'Just For You ',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Icon(Icons.star, color: Colors.blue, size: 20),
-            ],
-          ),
-        ),
-
-        // Product Grid
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: products.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 0.75,
+    return Scaffold(
+      appBar: AppBar(title: Text("🛍️ Products")),
+      body: products.isEmpty
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+        padding: EdgeInsets.all(10),
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          final product = products[index];
+          return Card(
+            margin: EdgeInsets.symmetric(vertical: 8),
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12)),
+            child: ListTile(
+              leading: product['image_url'] != null
+                  ? Image.network(product['image_url'], width: 60)
+                  : Icon(Icons.image_not_supported),
+              title: Text(product['name'] ?? 'No Name'),
+              subtitle: Text("৳ ${product['price'] ?? 'N/A'}"),
             ),
-            itemBuilder: (context, index) {
-              final product = products[index];
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProductDetailsPage(product: product),
-                    ),
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 6,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Image section
-                      Expanded(
-                        child: ClipRRect(
-                          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                          child: Image.asset(
-                            product['image']!,
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                          ),
-                        ),
-                      ),
-
-                      // New label above price
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-                        child: Text(
-                          'Special Offer\ Baicha Lon',
-                          style: const TextStyle(
-                            color: Colors.deepOrange,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-
-                      // Price text
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-                        child: Text(
-                          product['price']!,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
+          );
+        },
+      ),
     );
   }
 }
