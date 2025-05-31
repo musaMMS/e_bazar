@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import '../../widget/imagepath.dart';
+import '../Home/JustForYou_screen.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   const ProductDetailsPage({super.key, required Map<String, String> product});
@@ -270,7 +271,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 ],
               ),
             ),
-            JustForYouSection(),
+            JustNowSection(),
           ],
         ),
       ),

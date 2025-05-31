@@ -1,9 +1,8 @@
 import 'package:e_bazar/AdMob/Add_show.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../widget/imagepath.dart';
-import '../selectedproduct/Product_details.dart';
+import 'JustForYou_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,14 +19,25 @@ class _HomeScreenState extends State<HomeScreen> {
     'hY7m5jjJ9mM',
   ];
 
+  // Helper for size scaling
   double getResponsiveSize(BuildContext context, double size) {
     double width = MediaQuery.of(context).size.width;
-    return size * (width / 375); // 375 is a common design width
+    double scale = width / 375;
+    double cappedScale = scale.clamp(0.85, 1.2);
+    return size * cappedScale;
+  }
+
+  // Helper for font size scaling (smaller variation)
+  double getResponsiveFontSize(BuildContext context, double fontSize) {
+    double width = MediaQuery.of(context).size.width;
+    double scale = width / 375;
+    double cappedScale = scale.clamp(0.9, 1.15);
+    return fontSize * cappedScale;
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -37,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              BannerAdWidget(),
+                BannerAdWidget(),
 
               // Top Bar
               Row(
@@ -56,13 +66,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     onPressed: () {},
-                    child: const Text('My Activity'),
+                    child: Text(
+                      'My Activity',
+                      style: TextStyle(fontSize: getResponsiveFontSize(context, 14)),
+                    ),
                   ),
                   Row(
-                    children: const [
-                      Icon(Icons.notifications_none),
-                      SizedBox(width: 12),
-                      Icon(Icons.settings),
+                    children: [
+                      Icon(Icons.notifications_none, size: getResponsiveSize(context, 24)),
+                      SizedBox(width: getResponsiveSize(context, 12)),
+                      Icon(Icons.settings, size: getResponsiveSize(context, 24)),
                     ],
                   )
                 ],
@@ -72,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 'Hello, MusaDev!',
                 style: TextStyle(
-                  fontSize: getResponsiveSize(context, 24),
+                  fontSize: getResponsiveFontSize(context, 24),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -92,24 +105,34 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Announcement', style: TextStyle(fontWeight: FontWeight.bold)),
+                          Text('Announcement',
+                              style: TextStyle(
+                                  fontSize: getResponsiveFontSize(context, 16),
+                                  fontWeight: FontWeight.bold)),
                           SizedBox(height: getResponsiveSize(context, 4)),
                           Text(
                             'Lorem ipsum dolor sit amet, consectetur...',
-                            style: TextStyle(color: Colors.grey[600]),
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: getResponsiveFontSize(context, 14),
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    const Icon(Icons.arrow_forward_ios, color: Colors.blue),
+                    Icon(Icons.arrow_forward_ios,
+                        color: Colors.blue, size: getResponsiveSize(context, 16)),
                   ],
                 ),
               ),
 
               SizedBox(height: getResponsiveSize(context, 20)),
 
-              // Recently Viewed
-              Text('Recently viewed', style: TextStyle(fontSize: getResponsiveSize(context, 18), fontWeight: FontWeight.bold)),
+              Text('Recently viewed',
+                  style: TextStyle(
+                      fontSize: getResponsiveFontSize(context, 18),
+                      fontWeight: FontWeight.bold)),
               SizedBox(height: getResponsiveSize(context, 10)),
               SizedBox(
                 height: getResponsiveSize(context, 60),
@@ -120,7 +143,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.only(right: 8.0),
                     child: CircleAvatar(
                       radius: getResponsiveSize(context, 30),
-                      backgroundImage: AssetImage(AppImages.recentlyViewedImages[index]),
+                      backgroundImage:
+                      AssetImage(AppImages.recentlyViewedImages[index]),
                     ),
                   ),
                 ),
@@ -128,8 +152,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
               SizedBox(height: getResponsiveSize(context, 20)),
 
-              // My Orders
-              Text('My Orders', style: TextStyle(fontSize: getResponsiveSize(context, 18), fontWeight: FontWeight.bold)),
+              Text('My Orders',
+                  style: TextStyle(
+                      fontSize: getResponsiveFontSize(context, 18),
+                      fontWeight: FontWeight.bold)),
               SizedBox(height: getResponsiveSize(context, 10)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -142,8 +168,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
               SizedBox(height: getResponsiveSize(context, 20)),
 
-              // Stories (YouTube)
-              Text('Stories', style: TextStyle(fontSize: getResponsiveSize(context, 18), fontWeight: FontWeight.bold)),
+              Text('Stories',
+                  style: TextStyle(
+                      fontSize: getResponsiveFontSize(context, 18),
+                      fontWeight: FontWeight.bold)),
               SizedBox(height: getResponsiveSize(context, 10)),
               SizedBox(
                 height: getResponsiveSize(context, 180),
@@ -174,9 +202,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             fit: BoxFit.cover,
                           ),
                         ),
-                        child: const Align(
-                          alignment: Alignment.center,
-                          child: Icon(Icons.play_circle_fill, size: 48, color: Colors.white),
+                        child: Center(
+                          child: Icon(Icons.play_circle_fill,
+                              size: getResponsiveSize(context, 48), color: Colors.white),
                         ),
                       ),
                     );
@@ -186,10 +214,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
               SizedBox(height: getResponsiveSize(context, 20)),
 
-              // New Item Section
               sectionHeader('New Item'),
               GridView.count(
-                crossAxisCount: 4,
+                crossAxisCount: isLandscape ? 6 : 4,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 crossAxisSpacing: getResponsiveSize(context, 8),
@@ -205,64 +232,56 @@ class _HomeScreenState extends State<HomeScreen> {
 
               SizedBox(height: getResponsiveSize(context, 20)),
 
-              // Flash Sale Section
               sectionHeader('Flash Sale', showTimer: true),
               GridView.count(
-                crossAxisCount: 3,
+                crossAxisCount: isLandscape ? 4 : 3,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 mainAxisSpacing: getResponsiveSize(context, 8),
                 crossAxisSpacing: getResponsiveSize(context, 8),
                 childAspectRatio: 0.65,
-                children: List.generate(AppImages.flashSaleList.length, (index)=> flashSaleItem(AppImages.flashSaleList[index])),
+                children: List.generate(AppImages.flashSaleList.length,
+                        (index) => flashSaleItem(AppImages.flashSaleList[index])),
               ),
 
               SizedBox(height: getResponsiveSize(context, 20)),
 
-              // Categories from AppImages
               sectionHeader('Categories'),
               SizedBox(
                 height: getResponsiveSize(context, 130),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: AppImages.categoryList.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SizedBox(
-                        width: getResponsiveSize(context, 100),
-                        child: categoryItem(
-                          'Category $index',
-                          AppImages.categoryList[index],
-                          20 + index,
-                        ),
-                      ),
-                    );
-                  },
+                  itemBuilder: (context, index) => Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: getResponsiveSize(context, 100),
+                      child: categoryItem('Category $index',
+                          AppImages.categoryList[index], 20 + index),
+                    ),
+                  ),
                 ),
               ),
 
               SizedBox(height: getResponsiveSize(context, 20)),
 
-              // Horizontal Flash Sale Items
               sectionHeader('Horizontal Sale'),
               SizedBox(
                 height: getResponsiveSize(context, 200),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: AppImages.flashSaleList.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.all(8),
-                      width: getResponsiveSize(context, 150),
-                      child: flashSaleItem(AppImages.flashSaleList[index]),
-                    );
-                  },
+                  itemBuilder: (context, index) => Container(
+                    margin: const EdgeInsets.all(8),
+                    width: getResponsiveSize(context, 150),
+                    child: flashSaleItem(AppImages.flashSaleList[index]),
+                  ),
                 ),
               ),
+
               SizedBox(height: getResponsiveSize(context, 5)),
 
-               JustForYouSection(),
+              const JustNowSection(),
             ],
           ),
         ),
@@ -277,15 +296,16 @@ class _HomeScreenState extends State<HomeScreen> {
         vertical: getResponsiveSize(context, 8),
       ),
       decoration: BoxDecoration(
-        color: Colors.blue.withOpacity(0.1),
+        color: isActive ? Colors.blue.withOpacity(0.2) : Colors.blue.withOpacity(0.1),
         borderRadius: BorderRadius.circular(getResponsiveSize(context, 24)),
       ),
       child: Row(
         children: [
           Text(
             label,
-            style: const TextStyle(
-              color: Colors.blue,
+            style: TextStyle(
+              color: isActive ? Colors.blue[800] : Colors.blue,
+              fontSize: getResponsiveFontSize(context, 14),
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -302,62 +322,83 @@ class _HomeScreenState extends State<HomeScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title, style: TextStyle(fontSize: getResponsiveSize(context, 18), fontWeight: FontWeight.bold)),
+        Text(title,
+            style: TextStyle(
+                fontSize: getResponsiveFontSize(context, 18),
+                fontWeight: FontWeight.bold)),
         if (showTimer)
           Row(
-            children: const [
-              Icon(Icons.timer, color: Colors.blue, size: 16),
+            children: [
+              Icon(Icons.timer, color: Colors.blue, size: getResponsiveSize(context, 16)),
               SizedBox(width: 4),
-              Text("00", style: TextStyle(fontWeight: FontWeight.bold)),
-              Text(":36", style: TextStyle(fontWeight: FontWeight.bold)),
-              Text(":58", style: TextStyle(fontWeight: FontWeight.bold)),
+              Text("00:03:15", style: TextStyle(color: Colors.blue, fontSize: getResponsiveFontSize(context, 14))),
             ],
-          )
-        else
-          const Icon(Icons.arrow_forward, color: Colors.blue),
+          ),
       ],
     );
   }
 
   Widget categoryItem(String title, String imagePath, int count) {
-    return Column(
-      children: [
-        Expanded(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(getResponsiveSize(context, 12)),
-            child: Image.asset(imagePath, fit: BoxFit.cover),
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        Text('$count', style: const TextStyle(color: Colors.grey)),
-      ],
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(getResponsiveSize(context, 12)),
+      ),
+      padding: EdgeInsets.symmetric(
+        horizontal: getResponsiveSize(context, 10),
+        vertical: getResponsiveSize(context, 8),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(imagePath,
+              width: getResponsiveSize(context, 60),
+              height: getResponsiveSize(context, 60)),
+          SizedBox(height: getResponsiveSize(context, 8)),
+          Text(title,
+              style: TextStyle(
+                  fontSize: getResponsiveFontSize(context, 14),
+                  fontWeight: FontWeight.w500)),
+          Text('$count items',
+              style: TextStyle(
+                  color: Colors.grey.shade600,
+                  fontSize: getResponsiveFontSize(context, 12))),
+        ],
+      ),
     );
   }
 
   Widget flashSaleItem(String imagePath) {
-    return Stack(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(getResponsiveSize(context, 12)),
-          child: Image.asset(imagePath, fit: BoxFit.cover),
-        ),
-        Positioned(
-          top: getResponsiveSize(context, 8),
-          left: getResponsiveSize(context, 8),
-          child: Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: getResponsiveSize(context, 6),
-              vertical: getResponsiveSize(context, 2),
-            ),
-            decoration: BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.circular(getResponsiveSize(context, 6)),
-            ),
-            child: const Text('-20%', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(getResponsiveSize(context, 12)),
+      ),
+      child: Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(getResponsiveSize(context, 12)),
+            child: Image.asset(imagePath,
+                fit: BoxFit.cover, width: double.infinity, height: double.infinity),
           ),
-        ),
-      ],
+          Positioned(
+            top: 8,
+            left: 8,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text('35% OFF',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: getResponsiveFontSize(context, 12))),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -378,10 +419,7 @@ class _StoryPlayerState extends State<StoryPlayer> {
     super.initState();
     _controller = YoutubePlayerController(
       initialVideoId: widget.videoId,
-      flags: const YoutubePlayerFlags(
-        autoPlay: true,
-        mute: false,
-      ),
+      flags: const YoutubePlayerFlags(autoPlay: true),
     );
   }
 
@@ -393,67 +431,6 @@ class _StoryPlayerState extends State<StoryPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return YoutubePlayer(
-      controller: _controller,
-      showVideoProgressIndicator: true,
-    );
+    return YoutubePlayer(controller: _controller);
   }
 }
-
-
-class JustForYouSection extends StatefulWidget {
-  const JustForYouSection({super.key});
-
-  @override
-  State<JustForYouSection> createState() => _JustForYouSectionState();
-}
-
-class _JustForYouSectionState extends State<JustForYouSection> {
-  List<dynamic> products = [];
-
-  @override
-  void initState() {
-    super.initState();
-    fetchProducts();
-  }
-
-  Future<void> fetchProducts() async {
-    final response = await Supabase.instance.client
-        .from('products')
-        .select()
-        .order('id', ascending: false);
-    setState(() {
-      products = response;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("🛍️ Products")),
-      body: products.isEmpty
-          ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-        padding: EdgeInsets.all(10),
-        itemCount: products.length,
-        itemBuilder: (context, index) {
-          final product = products[index];
-          return Card(
-            margin: EdgeInsets.symmetric(vertical: 8),
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12)),
-            child: ListTile(
-              leading: product['image_url'] != null
-                  ? Image.network(product['image_url'], width: 60)
-                  : Icon(Icons.image_not_supported),
-              title: Text(product['name'] ?? 'No Name'),
-              subtitle: Text("৳ ${product['price'] ?? 'N/A'}"),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-

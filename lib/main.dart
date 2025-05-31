@@ -1,3 +1,4 @@
+import 'package:e_bazar/Ui%20/Home/JustForYou_screen.dart';
 import 'package:e_bazar/Ui%20/splash_log_sing_/Splash_screen.dart';
 import 'package:e_bazar/widget/color.dart';
 import 'package:flutter/material.dart';
