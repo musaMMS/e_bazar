@@ -221,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 crossAxisSpacing: getResponsiveSize(context, 8),
                 mainAxisSpacing: getResponsiveSize(context, 8),
-                childAspectRatio: 0.7,
+                childAspectRatio: 0.6,
                 children: [
                   categoryItem('Clothing', 'assets/person/musa512.png', 109),
                   categoryItem('Shoes', 'assets/person/m1.png', 530),
@@ -234,12 +234,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
               sectionHeader('Flash Sale', showTimer: true),
               GridView.count(
-                crossAxisCount: isLandscape ? 4 : 3,
+                crossAxisCount: isLandscape ? 6 : 4,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 mainAxisSpacing: getResponsiveSize(context, 8),
                 crossAxisSpacing: getResponsiveSize(context, 8),
-                childAspectRatio: 0.65,
+                childAspectRatio: 0.6,
                 children: List.generate(AppImages.flashSaleList.length,
                         (index) => flashSaleItem(AppImages.flashSaleList[index])),
               ),
@@ -248,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               sectionHeader('Categories'),
               SizedBox(
-                height: getResponsiveSize(context, 130),
+                height: getResponsiveSize(context, 150),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: AppImages.categoryList.length,
